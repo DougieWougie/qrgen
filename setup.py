@@ -23,6 +23,12 @@ setup(
         "qrcode[pil]",
         "pillow",
     ],
+    extras_require={
+        "dev": [
+            "pytest>=7.0.0",
+            "pytest-cov>=4.0.0",
+        ],
+    },
     entry_points={
         "console_scripts": [
             "qrgen=qrgen.cli:main",
