@@ -31,11 +31,7 @@ class TestCreateQRCode:
     def test_create_qr_code_custom_size(self, tmp_path):
         """Test QR code with custom size."""
         output_file = tmp_path / "large_qr.png"
-        result = create_qr_code(
-            "Test data",
-            output_path=str(output_file),
-            size=20
-        )
+        result = create_qr_code("Test data", output_path=str(output_file), size=20)
 
         assert output_file.exists()
         # Larger size should produce larger file (generally)
@@ -44,22 +40,16 @@ class TestCreateQRCode:
     def test_create_qr_code_custom_border(self, tmp_path):
         """Test QR code with custom border."""
         output_file = tmp_path / "border_qr.png"
-        result = create_qr_code(
-            "Test data",
-            output_path=str(output_file),
-            border=10
-        )
+        result = create_qr_code("Test data", output_path=str(output_file), border=10)
 
         assert output_file.exists()
 
-    @pytest.mark.parametrize("error_level", ['L', 'M', 'Q', 'H'])
+    @pytest.mark.parametrize("error_level", ["L", "M", "Q", "H"])
     def test_create_qr_code_error_correction_levels(self, tmp_path, error_level):
         """Test all error correction levels."""
         output_file = tmp_path / f"qr_{error_level}.png"
         result = create_qr_code(
-            "Test data",
-            output_path=str(output_file),
-            error_correction=error_level
+            "Test data", output_path=str(output_file), error_correction=error_level
         )
 
         assert output_file.exists()
@@ -68,9 +58,7 @@ class TestCreateQRCode:
         """Test that invalid error correction defaults to M."""
         output_file = tmp_path / "default_qr.png"
         result = create_qr_code(
-            "Test data",
-            output_path=str(output_file),
-            error_correction='INVALID'
+            "Test data", output_path=str(output_file), error_correction="INVALID"
         )
 
         # Should not raise error, should default to M
@@ -82,10 +70,10 @@ class TestCreateQRCode:
 
         assert result is None
 
-    @patch('builtins.print')
+    @patch("builtins.print")
     def test_create_qr_code_terminal_output(self, mock_print, tmp_path):
         """Test terminal output mode."""
-        with patch('qrcode.QRCode.print_ascii') as mock_ascii:
+        with patch("qrcode.QRCode.print_ascii") as mock_ascii:
             result = create_qr_code("Test data", terminal=True)
 
             # Verify print_ascii was called
@@ -93,16 +81,14 @@ class TestCreateQRCode:
             # Verify print was called for newline
             assert mock_print.called
 
-    @patch('builtins.print')
+    @patch("builtins.print")
     def test_create_qr_code_terminal_and_file(self, mock_print, tmp_path):
         """Test both terminal output and file saving."""
         output_file = tmp_path / "both_qr.png"
 
-        with patch('qrcode.QRCode.print_ascii') as mock_ascii:
+        with patch("qrcode.QRCode.print_ascii") as mock_ascii:
             result = create_qr_code(
-                "Test data",
-                output_path=str(output_file),
-                terminal=True
+                "Test data", output_path=str(output_file), terminal=True
             )
 
             # Verify both file and terminal output
