@@ -1,6 +1,6 @@
 # QRGen - QR Code Generator CLI
 <div align="left">
-  <img src="qrcode_gen_logo.png" alt="QRGen Logo" width="200"/>
+  <img src="qrcode_gen_logo.jpg" alt="QRGen Logo" width="200"/>
 </div>
 A simple, powerful command-line tool for generating QR codes from text, URLs, or any data.
 
