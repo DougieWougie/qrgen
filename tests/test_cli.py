@@ -198,3 +198,283 @@ class TestCLI:
             exit_code = main()
 
         assert exit_code == 1
+
+
+class TestCLIVisualCustomization:
+    """Tests for CLI visual customization options."""
+
+    def test_cli_custom_fill_color(self, tmp_path):
+        """Test CLI with custom fill color."""
+        output_file = tmp_path / "blue.png"
+        test_args = [
+            "qrgen",
+            "Test",
+            "-o",
+            str(output_file),
+            "--fill-color",
+            "blue",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_custom_back_color(self, tmp_path):
+        """Test CLI with custom background color."""
+        output_file = tmp_path / "yellow_bg.png"
+        test_args = [
+            "qrgen",
+            "Test",
+            "-o",
+            str(output_file),
+            "--back-color",
+            "yellow",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_both_colors(self, tmp_path):
+        """Test CLI with both custom colors."""
+        output_file = tmp_path / "colored.png"
+        test_args = [
+            "qrgen",
+            "Test",
+            "-o",
+            str(output_file),
+            "--fill-color",
+            "red",
+            "--back-color",
+            "white",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_hex_colors(self, tmp_path):
+        """Test CLI with hex color codes."""
+        output_file = tmp_path / "hex.png"
+        test_args = [
+            "qrgen",
+            "Test",
+            "-o",
+            str(output_file),
+            "--fill-color",
+            "#FF5733",
+            "--back-color",
+            "#C70039",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_with_logo(self, tmp_path):
+        """Test CLI with logo embedding."""
+        from PIL import Image
+
+        logo_file = tmp_path / "logo.png"
+        logo_img = Image.new("RGB", (100, 100), color="blue")
+        logo_img.save(logo_file)
+
+        output_file = tmp_path / "with_logo.png"
+        test_args = [
+            "qrgen",
+            "Test",
+            "-o",
+            str(output_file),
+            "--logo",
+            str(logo_file),
+            "--error-correction",
+            "H",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+
+class TestCLITemplates:
+    """Tests for CLI template options."""
+
+    def test_cli_wifi_template(self, tmp_path):
+        """Test CLI with WiFi template."""
+        output_file = tmp_path / "wifi.png"
+        test_args = [
+            "qrgen",
+            "MyNetwork,password123,WPA",
+            "-o",
+            str(output_file),
+            "--template",
+            "wifi",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_vcard_template(self, tmp_path):
+        """Test CLI with vCard template."""
+        output_file = tmp_path / "vcard.png"
+        test_args = [
+            "qrgen",
+            "John Doe,+1234567890,john@example.com,Acme",
+            "-o",
+            str(output_file),
+            "--template",
+            "vcard",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_sms_template(self, tmp_path):
+        """Test CLI with SMS template."""
+        output_file = tmp_path / "sms.png"
+        test_args = [
+            "qrgen",
+            "1234567890,Hello!",
+            "-o",
+            str(output_file),
+            "--template",
+            "sms",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_email_template(self, tmp_path):
+        """Test CLI with email template."""
+        output_file = tmp_path / "email.png"
+        test_args = [
+            "qrgen",
+            "test@example.com,Subject,Body",
+            "-o",
+            str(output_file),
+            "--template",
+            "email",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_phone_template(self, tmp_path):
+        """Test CLI with phone template."""
+        output_file = tmp_path / "phone.png"
+        test_args = [
+            "qrgen",
+            "1234567890",
+            "-o",
+            str(output_file),
+            "--template",
+            "phone",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+
+class TestCLIAdvancedTypes:
+    """Tests for CLI advanced QR code types."""
+
+    def test_cli_micro_qr(self, tmp_path):
+        """Test CLI with Micro QR code type."""
+        output_file = tmp_path / "micro.png"
+        test_args = ["qrgen", "Small", "-o", str(output_file), "--type", "micro"]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_standard_qr_explicit(self, tmp_path):
+        """Test CLI with explicit standard type."""
+        output_file = tmp_path / "standard.png"
+        test_args = ["qrgen", "Data", "-o", str(output_file), "--type", "standard"]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_micro_qr_with_colors(self, tmp_path):
+        """Test CLI Micro QR with custom colors."""
+        output_file = tmp_path / "colored_micro.png"
+        test_args = [
+            "qrgen",
+            "Test",
+            "-o",
+            str(output_file),
+            "--type",
+            "micro",
+            "--fill-color",
+            "blue",
+            "--back-color",
+            "yellow",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()
+
+    def test_cli_combined_features(self, tmp_path):
+        """Test CLI with multiple new features combined."""
+        from PIL import Image
+
+        logo_file = tmp_path / "logo.png"
+        logo_img = Image.new("RGB", (50, 50), color="green")
+        logo_img.save(logo_file)
+
+        output_file = tmp_path / "combined.png"
+        test_args = [
+            "qrgen",
+            "MyNetwork,pass123,WPA",
+            "-o",
+            str(output_file),
+            "--template",
+            "wifi",
+            "--fill-color",
+            "darkblue",
+            "--back-color",
+            "lightblue",
+            "--size",
+            "15",
+            "--error-correction",
+            "H",
+        ]
+
+        with patch.object(sys, "argv", test_args):
+            exit_code = main()
+
+        assert exit_code == 0
+        assert output_file.exists()

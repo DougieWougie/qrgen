@@ -118,3 +118,96 @@ class TestCreateQRCode:
         result = create_qr_code(special_text, output_path=str(output_file))
 
         assert output_file.exists()
+
+
+class TestVisualCustomization:
+    """Tests for visual customization features (colors, logos)."""
+
+    def test_create_qr_code_custom_fill_color(self, tmp_path):
+        """Test QR code with custom fill color."""
+        output_file = tmp_path / "blue_qr.png"
+        result = create_qr_code(
+            "Test data", output_path=str(output_file), fill_color="blue"
+        )
+
+        assert output_file.exists()
+        assert output_file.stat().st_size > 0
+
+    def test_create_qr_code_custom_back_color(self, tmp_path):
+        """Test QR code with custom background color."""
+        output_file = tmp_path / "yellow_bg_qr.png"
+        result = create_qr_code(
+            "Test data", output_path=str(output_file), back_color="yellow"
+        )
+
+        assert output_file.exists()
+
+    def test_create_qr_code_both_colors(self, tmp_path):
+        """Test QR code with both custom colors."""
+        output_file = tmp_path / "colored_qr.png"
+        result = create_qr_code(
+            "Test data",
+            output_path=str(output_file),
+            fill_color="darkblue",
+            back_color="lightgray",
+        )
+
+        assert output_file.exists()
+
+    def test_create_qr_code_hex_colors(self, tmp_path):
+        """Test QR code with hex color codes."""
+        output_file = tmp_path / "hex_qr.png"
+        result = create_qr_code(
+            "Test data",
+            output_path=str(output_file),
+            fill_color="#FF5733",
+            back_color="#C70039",
+        )
+
+        assert output_file.exists()
+
+    def test_create_qr_code_with_logo(self, tmp_path):
+        """Test QR code with logo embedding."""
+        # Create a simple test logo
+        from PIL import Image
+
+        logo_file = tmp_path / "test_logo.png"
+        logo_img = Image.new("RGB", (100, 100), color="red")
+        logo_img.save(logo_file)
+
+        output_file = tmp_path / "logo_qr.png"
+        result = create_qr_code(
+            "Test data",
+            output_path=str(output_file),
+            logo_path=str(logo_file),
+            error_correction="H",
+        )
+
+        assert output_file.exists()
+        assert output_file.stat().st_size > 0
+
+    def test_create_qr_code_logo_with_transparency(self, tmp_path):
+        """Test QR code with transparent logo."""
+        from PIL import Image
+
+        logo_file = tmp_path / "transparent_logo.png"
+        logo_img = Image.new("RGBA", (100, 100), color=(255, 0, 0, 128))
+        logo_img.save(logo_file)
+
+        output_file = tmp_path / "transparent_logo_qr.png"
+        result = create_qr_code(
+            "Test data", output_path=str(output_file), logo_path=str(logo_file)
+        )
+
+        assert output_file.exists()
+
+    def test_create_qr_code_nonexistent_logo(self, tmp_path):
+        """Test QR code with nonexistent logo path."""
+        output_file = tmp_path / "no_logo_qr.png"
+
+        with pytest.raises(Exception):
+            create_qr_code(
+                "Test data",
+                output_path=str(output_file),
+                logo_path="/nonexistent/logo.png",
+            )

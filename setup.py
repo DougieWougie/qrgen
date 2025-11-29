@@ -22,6 +22,7 @@ setup(
     install_requires=[
         "qrcode[pil]",
         "pillow",
+        "segno",
     ],
     extras_require={
         "dev": [
